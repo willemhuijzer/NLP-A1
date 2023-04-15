@@ -4,58 +4,96 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Helper functions
-def compute_stats_and_freqs(corpus):
-    joined_corpus = " ".join(corpus)  # join sentences into a single string
-    tokens = nltk.word_tokenize(joined_corpus)
-    freqs = nltk.FreqDist(tokens)
-    stats = {"num_tokens": len(tokens), "num_types": len(freqs)}
-    return stats, freqs
+nltk.download("brown")
+nltk.download("averaged_perceptron_tagger")
 
-def pos_tagging(corpus):
-    tokens = nltk.word_tokenize(" ".join(corpus))
-    tagged_tokens = nltk.pos_tag(tokens)
-    pos_tags = [tag for word, tag in tagged_tokens]
-    most_common_tags = Counter(pos_tags).most_common(10)
-    return most_common_tags
-
-def plot_freq_curves(freqs, title, log_axes=False):
-    plt.figure()
-    ranks = range(1, len(freqs) + 1)
-    frequencies = [f for _, f in freqs]
-
-    if log_axes:
-        plt.loglog(ranks, frequencies, marker='.')
+def analyze_corpus(corpus, categories=None):
+    # Load the data from the corpus
+    if categories:
+        tokens = brown.words(categories=categories)
+        words = [token for token in tokens if token.isalnum()] # of isalpha ????? is een getal een woord?
+        sents = brown.sents(categories=categories)
     else:
-        plt.plot(ranks, frequencies, marker='.')
+        tokens = brown.words()
+        words = [token for token in tokens if token.isalnum()] # of isalpha ????? is een getal een woord?
+        sents = brown.sents()
 
-    plt.xlabel('Rank')
-    plt.ylabel('Frequency')
-    plt.title(title)
+    # Calculate the statistics
+    num_tokens = len(tokens)
+    num_types = len(set(tokens))
+    num_words = len(words) 
+    num_sents = len(sents)
+    avg_words_per_sentence = num_words / num_sents
+    avg_word_length = sum(len(word) for word in words) / num_words
+
+    # POS tagging
+    pos_tags = nltk.pos_tag(tokens)
+    pos_tag_counts = Counter(tag for _, tag in pos_tags).most_common(10)
+
+    # Frequency distribution
+    word_freq = Counter(tokens)
+    sorted_word_freq = sorted(word_freq.items(), key=lambda x: x[1], reverse=True)
+
+    return {
+        "num_tokens": num_tokens,
+        "num_types": num_types,
+        "num_words": num_words,
+        "num_sents": num_sents,
+        "avg_words_per_sentence": avg_words_per_sentence,
+        "avg_word_length": avg_word_length,
+        "pos_tag_counts": pos_tag_counts,
+        "sorted_word_freq": sorted_word_freq,
+    }
+    
+
+
+
+
+whole_corpus_stats = analyze_corpus(brown)
+news_stats = analyze_corpus(brown, categories="news")
+romance_stats = analyze_corpus(brown, categories="romance")
+
+print("Whole Corpus:")
+for key, value in whole_corpus_stats.items():
+    if key != "sorted_word_freq":
+        print(f"{key}: {value}")
+
+print("\nNews:")
+for key, value in news_stats.items():
+    if key != "sorted_word_freq":
+        print(f"{key}: {value}")
+
+print("\nRomance:")
+for key, value in romance_stats.items():
+    if key != "sorted_word_freq":
+        print(f"{key}: {value}")
+
+
+def plot_frequency_curves(data, title):
+    # Extract frequencies from the sorted_word_freq data
+    frequencies = [freq for _, freq in data["sorted_word_freq"]]
+    
+    # Create a linear plot
+    plt.figure(figsize=(10, 5))
+    plt.plot(frequencies)
+    plt.title(f"Frequency Curve (Linear) - {title}")
+    plt.xlabel("Position in Frequency List")
+    plt.ylabel("Frequency")
     plt.show()
 
-# Analyzing the whole corpus and chosen genres
-whole_corpus = brown.sents()
-whole_corpus_stats = compute_stats_and_freqs(whole_corpus)
+    # Create a log-log plot
+    plt.figure(figsize=(10, 5))
+    plt.loglog(frequencies)
+    plt.title(f"Frequency Curve (Log-Log) - {title}")
+    plt.xlabel("Position in Frequency List")
+    plt.ylabel("Frequency")
+    plt.show()
 
-genre1 = brown.sents(categories='news')
-genre1_stats = compute_stats_and_freqs(genre1)
+# Plot frequency curves for the whole corpus
+plot_frequency_curves(whole_corpus_stats, "Whole Corpus")
 
-genre2 = brown.sents(categories='romance')
-genre2_stats = compute_stats_and_freqs(genre2)
+# Plot frequency curves for the news genre
+plot_frequency_curves(news_stats, "News")
 
-print("Whole corpus statistics:", whole_corpus_stats)
-print("Genre 1 (news) statistics:", genre1_stats)
-print("Genre 2 (romance) statistics:", genre2_stats)
-
-# POS tagging
-whole_corpus_pos_tags = pos_tagging(whole_corpus)
-print("Ten most frequent POS tags in the whole corpus:", whole_corpus_pos_tags)
-
-# Plot frequency curves
-plot_freq_curves(whole_corpus_stats['freqs'], 'Whole corpus frequency curve')
-plot_freq_curves(whole_corpus_stats['freqs'], 'Whole corpus frequency curve (log-log)', log_axes=True)
-plot_freq_curves(genre1_stats['freqs'], 'Genre 1 (news) frequency curve')
-plot_freq_curves(genre1_stats['freqs'], 'Genre 1 (news) frequency curve (log-log)', log_axes=True)
-plot_freq_curves(genre2_stats['freqs'], 'Genre 2 (romance) frequency curve')
-plot_freq_curves(genre2_stats['freqs'], 'Genre 2 (romance) frequency curve (log-log)', log_axes=True)
+# Plot frequency curves for the romance genre
+plot_frequency_curves(romance_stats, "Romance")
