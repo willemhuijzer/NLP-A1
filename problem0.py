@@ -45,8 +45,25 @@ def analyze_corpus(corpus, categories=None):
         "sorted_word_freq": sorted_word_freq,
     }
     
+def plot_frequency_curves(data, title):
+    # Extract frequencies from the sorted_word_freq data
+    frequencies = [freq for _, freq in data["sorted_word_freq"]]
+    
+    # Create a linear plot
+    plt.figure(figsize=(10, 5))
+    plt.plot(frequencies)
+    plt.title(f"Frequency Curve (Linear) - {title}")
+    plt.xlabel("Position in Frequency List")
+    plt.ylabel("Frequency")
+    plt.show()
 
-
+    # Create a log-log plot
+    plt.figure(figsize=(10, 5))
+    plt.loglog(frequencies)
+    plt.title(f"Frequency Curve (Log-Log) - {title}")
+    plt.xlabel("Position in Frequency List")
+    plt.ylabel("Frequency")
+    plt.show()
 
 
 whole_corpus_stats = analyze_corpus(brown)
@@ -67,27 +84,6 @@ print("\nRomance:")
 for key, value in romance_stats.items():
     if key != "sorted_word_freq":
         print(f"{key}: {value}")
-
-
-def plot_frequency_curves(data, title):
-    # Extract frequencies from the sorted_word_freq data
-    frequencies = [freq for _, freq in data["sorted_word_freq"]]
-    
-    # Create a linear plot
-    plt.figure(figsize=(10, 5))
-    plt.plot(frequencies)
-    plt.title(f"Frequency Curve (Linear) - {title}")
-    plt.xlabel("Position in Frequency List")
-    plt.ylabel("Frequency")
-    plt.show()
-
-    # Create a log-log plot
-    plt.figure(figsize=(10, 5))
-    plt.loglog(frequencies)
-    plt.title(f"Frequency Curve (Log-Log) - {title}")
-    plt.xlabel("Position in Frequency List")
-    plt.ylabel("Frequency")
-    plt.show()
 
 # Plot frequency curves for the whole corpus
 plot_frequency_curves(whole_corpus_stats, "Whole Corpus")
