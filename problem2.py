@@ -21,13 +21,13 @@ for i, line in enumerate(vocab):
     word_index_dict[word] = i
 vocab.close()
 
-f = open("brown_100.txt")
+brown_file = open("brown_100.txt")
 
 # Initialize the counts to a zero vector
 counts = np.zeros(len(word_index_dict))
 
 # Iterate through the file and update counts
-for line in f:
+for line in brown_file:
     # Split the sentence into a list of words and convert each word to lowercase
     words = line.lower().split()
 
@@ -36,7 +36,7 @@ for line in f:
         index = word_index_dict[word]
         counts[index] += 1
 
-f.close()
+brown_file.close()
 
 # Normalize the counts
 probs = counts / np.sum(counts)
