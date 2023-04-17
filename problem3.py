@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
-
-"""
-NLP A2: N-Gram Language Models
-
-@author: Klinton Bicknell, Harry Eldridge, Nathan Schneider, Lucia Donatelli, Alexander Koller
-
-DO NOT SHARE/DISTRIBUTE SOLUTIONS WITHOUT THE INSTRUCTOR'S PERMISSION
-"""
+# BIGRAM MODEL
 
 import numpy as np
 from sklearn.preprocessing import normalize
 from generate import GENERATE
 import random
+import pickle # to save to dictonary
 import codecs
 
 # Load the word-to-index dictionary
@@ -42,7 +36,10 @@ f.close()
 # Normalize the counts
 probs = normalize(counts, norm='l1', axis=1)
 
-np.save("unigram_probs.npy", probs)
+# Save the word_index_dict and probs to a file
+np.save("bigram_probs.npy", probs)
+with open("word_index_dict.pkl", "wb") as f:
+    pickle.dump(word_index_dict, f)
 
 # Write the bigram probabilities to a file
 with open("bigram_probs.txt", "w") as out_file:

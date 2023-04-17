@@ -1,19 +1,9 @@
 #!/usr/bin/env python3
-
-"""
-NLP A2: N-Gram Language Models
-
-@author: Klinton Bicknell, Harry Eldridge, Nathan Schneider, Lucia Donatelli, Alexander Koller
-
-DO NOT SHARE/DISTRIBUTE SOLUTIONS WITHOUT THE INSTRUCTOR'S PERMISSION
-"""
-
 import numpy as np
 from sklearn.preprocessing import normalize
 from generate import GENERATE
 import random
 import codecs
-import pickle # to save to dictonary
 
 # Load the word-to-index dictionary
 vocab = codecs.open("brown_vocab_100.txt", encoding="utf-8")
@@ -53,10 +43,6 @@ with open("smooth_probs.txt", "w") as out_file:
     out_file.write(f"p(campaign | the): {probs[word_index_dict['the'], word_index_dict['campaign']]:.6f}\n")
     out_file.write(f"p(calls | anonymous): {probs[word_index_dict['anonymous'], word_index_dict['calls']]:.6f}\n")
 
-# Save the word_index_dict and probs to a file
-np.save("bigram_probs.npy", probs)
-with open("word_index_dict.pkl", "wb") as f:
-    pickle.dump(word_index_dict, f)
 
 # Generate sentences using the bigram model
 generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max_words=50, start_word='<s>') for _ in range(5)]
