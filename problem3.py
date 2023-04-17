@@ -39,9 +39,10 @@ for line in f:
         previous_word = word
 f.close()
 
-
 # Normalize the counts
 probs = normalize(counts, norm='l1', axis=1)
+
+np.save("unigram_probs.npy", probs)
 
 # Write the bigram probabilities to a file
 with open("bigram_probs.txt", "w") as out_file:
