@@ -17,17 +17,33 @@ vocab = open("brown_vocab_100.txt")
 #load the indices dictionary
 word_index_dict = {}
 for i, line in enumerate(vocab):
-    #TODO: import part 1 code to build dictionary
+    word = line.rstrip()
+    word_index_dict[word] = i
+vocab.close()
 
 f = open("brown_100.txt")
 
-counts = #TODO: initialize counts to a zero vector
+# Initialize the counts to a zero vector
+counts = np.zeros(len(word_index_dict))
 
-#TODO: iterate through file and update counts
+# Iterate through the file and update counts
+for line in f:
+    # Split the sentence into a list of words and convert each word to lowercase
+    words = line.lower().split()
+
+    # Increment the count for each word in the sentence
+    for word in words:
+        index = word_index_dict[word]
+        counts[index] += 1
 
 f.close()
 
-#TODO: normalize and writeout counts. 
+# Normalize the counts
+probs = counts / np.sum(counts)
 
+# Print the normalized counts
+print("Test: \n")
+print("The probability of the word 'all' is: ", probs[word_index_dict['all']])
+print("The probability of the word 'resolution' is: ", probs[word_index_dict['resolution']])
 
 
