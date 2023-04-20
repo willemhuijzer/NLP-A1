@@ -11,20 +11,21 @@ word_index_dict = {}
 for i, line in enumerate(vocab):
     word = line.rstrip()
     word_index_dict[word] = i
-vocab.close()
+
 
 # Initialize the counts to a numpy matrix of zeros
 counts = np.zeros((len(word_index_dict), len(word_index_dict)))
 
 f = codecs.open("brown_100.txt")
 # Iterate through the file and update counts
-previous_word = "<s>" # this here to prohibt to many <s> in a row
+
 for line in f:
+    previous_word = "<s>"
     words = line.lower().split()
-    for word in words:
+    for word in words[1:]:
+        
         counts[word_index_dict[previous_word], word_index_dict[word]] += 1
         previous_word = word
-f.close()
 
 # Normalize the counts
 probs = normalize(counts, norm='l1', axis=1)

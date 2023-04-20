@@ -9,4 +9,4 @@ with open("brown_vocab_100.txt", "r") as vf:
 
 print(f"Index of the word 'all': {word_index_dict['all']}")
 print(f"Index of the word 'resolution': {word_index_dict['resolution']}")
-print(f"Length of the dictionairy: {len(word_index_dict)}")
+print(f"Length of the dictionary: {len(word_index_dict)}")

@@ -8,12 +8,12 @@ with open("brown_vocab_100.txt", "r") as vf:
     for index, line in enumerate(vf):
         word = line.rstrip()
         word_index_dict[word] = index
-    
 
 # Initialize the counts to a zero vector
 counts = np.zeros(len(word_index_dict))
 
 brown_file = open("brown_100.txt")
+
 # Iterate through the file and update counts
 for line in brown_file:
     words = line.lower().split()

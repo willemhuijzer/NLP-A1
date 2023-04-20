@@ -1,25 +1,37 @@
+# TRIGRAM MODEL
 import numpy as np
-import pickle  # to open a dictionary
-
-# Chain rule P(w1, w2, w3) = P(w3 | w2) * P(w2 | w1) * P(w1)
-def trigram_probability(trigram, unigram_probs, bigram_probs, word_index_dict):
-    w1, w2, w3 = trigram
-    unigram_w1 = unigram_probs[word_index_dict[w1]]
-    bigram_w2_w1 = bigram_probs[word_index_dict[w1]][word_index_dict[w2]]
-    bigram_w3_w2 = bigram_probs[word_index_dict[w2]][word_index_dict[w3]]
-    trigram_prob =  bigram_w3_w2 * bigram_w2_w1 * unigram_w1
-    return trigram_prob
+from sklearn.preprocessing import normalize
+from generate import GENERATE
+import codecs
 
 # Load the word-to-index dictionary
-with open("word_index_dict.pkl", "rb") as f:
-    word_index_dict = pickle.load(f)
+vocab = codecs.open("brown_vocab_100.txt")
+word_index_dict = {}
+for i, line in enumerate(vocab):
+    word = line.rstrip()
+    word_index_dict[word] = i
+vocab.close()
 
-# Load the bigram probabilities
-unigram_probs = np.load("unigram_probs.npy")
-bigram_probs = np.load("bigram_probs.npy")
-trigram = ("in", "the", "past")
+# Initialize the counts to a numpy matrix of zeros
+counts_2 = np.zeros((len(word_index_dict), len(word_index_dict)))
+counts_3 = np.zeros((len(word_index_dict), len(word_index_dict), len(word_index_dict)))
+f = codecs.open("brown_100.txt")
 
-trigram_prob = trigram_probability(trigram, unigram_probs, bigram_probs, word_index_dict)
+# Iterate through the file and update counts
+for line in f:
+    previous_word = "<s>"
+    words = line.lower().split()
+    for i, word in enumerate(words[1: -2]):
+        next_word = words[i + 2]
+        counts_3[word_index_dict[previous_word], word_index_dict[word], word_index_dict[next_word]] += 1
+        counts_2[word_index_dict[previous_word], word_index_dict[word]] += 1
+        previous_word = word
+f.close()
 
-print(f"P({trigram[0]}, {trigram[1]}, {trigram[2]}) ≈ {trigram_prob:.7f}")
+upper = counts_3[word_index_dict['in'], word_index_dict['the'], word_index_dict['past']]
+down = counts_2[word_index_dict['in'], word_index_dict['the']]
+probs = upper / down 
 
+print(probs)
+# Write the bigram probabilities to a file
+# print(probs[word_index_dict['in'], word_index_dict['the'], word_index_dict['past']])

@@ -32,17 +32,19 @@ def analyze_corpus(corpus, categories=None):
     # Load the data from the corpus
     if categories:
         tokens = brown.words(categories=categories)
-        words = [token for token in tokens if token.isalpha()]
+        words = [token.lower() for token in tokens if token.isalpha()]
         sentences = brown.sents(categories=categories)
     else:
         tokens = brown.words()
-        words = [token for token in tokens if token.isalpha()]  # punt weghalen
+        words = [token.lower() for token in tokens if token.isalpha()]  # punt weghalen
         sentences = brown.sents()
 
     # Calculate the statistics
-    number_tokens = len(tokens)  # ????
+    number_tokens = len(tokens)  
     number_types = len(set(tokens))
     number_words = len(words) 
+    number_word_types = len(set(words))
+
     number_sentences = len(sentences)
     avg_words_per_sentence = number_words / number_sentences
     avg_word_length = sum(len(word) for word in words) / number_words
@@ -60,6 +62,7 @@ def analyze_corpus(corpus, categories=None):
                 "number_words": number_words,
                 "number_sentences": number_sentences,
                 "avg_words_per_sentence": avg_words_per_sentence,
+                "number_word_types": number_word_types,
                 "avg_word_length": avg_word_length,
                 "pos_tag_counts": pos_tag_counts,
                 "sorted_word_freq": sorted_word_freq,}
