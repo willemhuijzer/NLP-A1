@@ -7,10 +7,6 @@ def trigram_probability(trigram, unigram_probs, bigram_probs, word_index_dict):
     unigram_w1 = unigram_probs[word_index_dict[w1]]
     bigram_w2_w1 = bigram_probs[word_index_dict[w1]][word_index_dict[w2]]
     bigram_w3_w2 = bigram_probs[word_index_dict[w2]][word_index_dict[w3]]
-
-    print(f"Unigram probability of {w1}: {unigram_w1}")
-    print(f"Bigram probability of {w2} given {w1}: {bigram_w2_w1}")
-    print(f"Bigram probability of {w3} given {w2}: {bigram_w3_w2}")
     trigram_prob =  bigram_w3_w2 * bigram_w2_w1 * unigram_w1
     return trigram_prob
 

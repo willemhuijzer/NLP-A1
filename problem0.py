@@ -32,15 +32,15 @@ def analyze_corpus(corpus, categories=None):
     # Load the data from the corpus
     if categories:
         tokens = brown.words(categories=categories)
-        words = [token for token in tokens if token.isalnum()] # of isalpha ????? is een getal een woord?
+        words = [token for token in tokens if token.isalpha()]
         sentences = brown.sents(categories=categories)
     else:
         tokens = brown.words()
-        words = [token for token in tokens if token.isalnum()] # of isalpha ????? is een getal een woord?
+        words = [token for token in tokens if token.isalpha()]  # punt weghalen
         sentences = brown.sents()
 
     # Calculate the statistics
-    number_tokens = len(tokens)
+    number_tokens = len(tokens)  # ????
     number_types = len(set(tokens))
     number_words = len(words) 
     number_sentences = len(sentences)
