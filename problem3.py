@@ -50,3 +50,28 @@ with open("bigram_generation.txt", "w") as f:
                  
 for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
     print(f"Sentence {i}: {sentence}")
+
+#Iterate through every sentence in the toy corpus
+toycorpus_file = open("toy_corpus.txt")
+
+
+with open("bigram_eval.txt", "w") as f:
+    for line in toycorpus_file:
+        numbigrams = []
+        previous_word = "<s>"
+        words = line.lower().split()
+        sentprob = 1
+        # sent_len = len(words)
+        for word in words[1:]:
+            bigram = (previous_word, word)
+            numbigrams.append(bigram)
+            sent_len = len(numbigrams)
+            wordprob = probs[word_index_dict[previous_word], word_index_dict[word]]
+            sentprob *= wordprob
+            previous_word = word
+        perplexity = 1/(pow(sentprob, 1.0/sent_len))
+        
+        
+        f.write(f"{perplexity}\n")
+f.close()
+toycorpus_file.close()
