@@ -12,7 +12,6 @@ for i, line in enumerate(vocab):
     word = line.rstrip()
     word_index_dict[word] = i
 
-
 # Initialize the counts to a numpy matrix of zeros
 counts = np.zeros((len(word_index_dict), len(word_index_dict)))
 
@@ -42,8 +41,12 @@ print(f"p(campaign | the): {probs[word_index_dict['the'], word_index_dict['campa
 print(f"p(calls | anonymous): {probs[word_index_dict['anonymous'], word_index_dict['calls']]:.6f}\n")
 
 # Generate sentences using the bigram model
-generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max_words=50, start_word='<s>') for _ in range(5)]
+generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max_words=50, start_word='<s>') for _ in range(10)]
 
-# Print the generated sentences
-for i, sentence in enumerate(generated_sentences, start=1): 
-    print(f"Sentence {i}: {sentence}") 
+# Store the generated sentences in a file bigram_generation.txt
+with open("bigram_generation.txt", "w") as f:
+    for sentence in generated_sentences:
+        f.write(f"{sentence}")
+                 
+for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
+    print(f"Sentence {i}: {sentence}")

@@ -9,6 +9,8 @@ with open("brown_vocab_100.txt", "r") as vf:
         word = line.rstrip()
         word_index_dict[word] = index
 
+print(word_index_dict)
+
 # Initialize the counts to a zero vector
 counts = np.zeros(len(word_index_dict))
 
@@ -33,4 +35,14 @@ print("Test: \n")
 print("The probability of the word 'all' is: ", probs[word_index_dict['all']])
 print("The probability of the word 'resolution' is: ", probs[word_index_dict['resolution']])
 
+# Generate sentences using the bigram model
+generated_sentences = [GENERATE(word_index_dict, probs, model_type='unigram', max_words=50, start_word='<s>') for _ in range(10)]
+
+# Store the generated sentences in a file unigram_generation.txt
+with open("unigram_generation.txt", "w") as f:
+    for sentence in generated_sentences:
+        f.write(f"{sentence}")
+                 
+for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
+    print(f"Sentence {i}: {sentence}")
 
