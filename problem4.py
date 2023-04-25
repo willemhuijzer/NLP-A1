@@ -68,7 +68,6 @@ with open("smoothed_eval.txt", "w") as f:
             previous_word = word
         perplexity = 1/(pow(sentprob, 1.0/sent_len))
         
-        
         f.write(f"{perplexity}\n")
 f.close()
 toycorpus_file.close()

@@ -54,7 +54,6 @@ for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s
 #Iterate through every sentence in the toy corpus
 toycorpus_file = open("toy_corpus.txt")
 
-
 with open("bigram_eval.txt", "w") as f:
     for line in toycorpus_file:
         numbigrams = []
@@ -70,7 +69,6 @@ with open("bigram_eval.txt", "w") as f:
             sentprob *= wordprob
             previous_word = word
         perplexity = 1/(pow(sentprob, 1.0/sent_len))
-        
         
         f.write(f"{perplexity}\n")
 f.close()
