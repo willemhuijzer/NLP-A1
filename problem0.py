@@ -32,11 +32,11 @@ def analyze_corpus(corpus, categories=None):
     # Load the data from the corpus
     if categories:
         tokens = brown.words(categories=categories)
-        words = [token.lower() for token in tokens if token.isalpha()]
+        words = [token.lower() for token in tokens if any(c.isalpha() for c in token)]
         sentences = brown.sents(categories=categories)
     else:
         tokens = brown.words()
-        words = [token.lower() for token in tokens if token.isalpha()]  # punt weghalen
+        words = [token.lower() for token in tokens if any(c.isalpha() for c in token)]  # punt weghalen
         sentences = brown.sents()
 
     # Calculate the statistics
