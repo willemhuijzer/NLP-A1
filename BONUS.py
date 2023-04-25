@@ -53,7 +53,7 @@ for sentence in sentences:
         previous_word = word
 
 print(counts)
-
+#het klopt nog niet met de <s> want bij de unigram count wordt deze nu niet meegenomen 
 
 
 
