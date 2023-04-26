@@ -34,7 +34,7 @@ print("Test: \n")
 print("The probability of the word 'all' is: ", probs[word_index_dict['all']])
 print("The probability of the word 'resolution' is: ", probs[word_index_dict['resolution']])
 
-# Generate sentences using the bigram model
+# Generate sentences using the unigram model
 generated_sentences = [GENERATE(word_index_dict, probs, model_type='unigram', max_words=50, start_word='<s>') for _ in range(10)]
 
 # Store the generated sentences in a file unigram_generation.txt
