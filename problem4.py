@@ -43,10 +43,10 @@ generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max
 # Store the generated sentences in a file smoothed_generation.txt
 with open("smoothed_generation.txt", "w") as f:
     for sentence in generated_sentences:
-        f.write(f"{sentence}")
+        f.write(f"{sentence}\n")
                  
 for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
-    print(f"Sentence {i}: {sentence}")
+    print(f"Sentence {i}: {sentence}\n")
 
 #Iterate through every sentence in the toy corpus
 toycorpus_file = open("toy_corpus.txt")

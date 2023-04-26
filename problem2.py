@@ -16,8 +16,7 @@ brown_file = open("brown_100.txt")
 
 # Iterate through the file and update counts
 for line in brown_file:
-    words = line.lower().split()
-
+    words = line.lower().split()    
     for word in words:
         index = word_index_dict[word]
         counts[index] += 1
@@ -26,11 +25,13 @@ brown_file.close()
 # Normalize the counts
 probs = counts / np.sum(counts)
 
-
 np.save("unigram_probs.npy", probs)
 
+# write  probs to a file
+with open("unigram_probs.txt", "w") as f:
+    f.write(f"{probs}")
+
 # Print the normalized counts
-print("Test: \n")
 print("The probability of the word 'all' is: ", probs[word_index_dict['all']])
 print("The probability of the word 'resolution' is: ", probs[word_index_dict['resolution']])
 
@@ -40,7 +41,7 @@ generated_sentences = [GENERATE(word_index_dict, probs, model_type='unigram', ma
 # Store the generated sentences in a file unigram_generation.txt
 with open("unigram_generation.txt", "w") as f:
     for sentence in generated_sentences:
-        f.write(f"{sentence}")
+        f.write(f"{sentence}\n")
                  
 for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
     print(f"Sentence {i}: {sentence}")
@@ -58,7 +59,6 @@ with open("unigram_eval.txt", "w") as f:
             wordprob = probs[index]
             sentprob *= wordprob
         perplexity = 1/(pow(sentprob, 1.0/sent_len))
-        
         
         f.write(f"{perplexity}\n")
 f.close()

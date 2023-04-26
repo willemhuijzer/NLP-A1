@@ -35,10 +35,11 @@ with open("word_index_dict.pkl", "wb") as f:
     pickle.dump(word_index_dict, f)
 
 # Write the bigram probabilities to a file
-print(f"p(the | all): {probs[word_index_dict['all'], word_index_dict['the']]:.6f}\n")
-print(f"p(jury | the): {probs[word_index_dict['the'], word_index_dict['jury']]:.6f}\n")
-print(f"p(campaign | the): {probs[word_index_dict['the'], word_index_dict['campaign']]:.6f}\n")
-print(f"p(calls | anonymous): {probs[word_index_dict['anonymous'], word_index_dict['calls']]:.6f}\n")
+with open("bigram_probs.txt", "w") as f:
+    print(f"p(the | all): {probs[word_index_dict['all'], word_index_dict['the']]:.6f}\n")
+    print(f"p(jury | the): {probs[word_index_dict['the'], word_index_dict['jury']]:.6f}\n")
+    print(f"p(campaign | the): {probs[word_index_dict['the'], word_index_dict['campaign']]:.6f}\n")
+    print(f"p(calls | anonymous): {probs[word_index_dict['anonymous'], word_index_dict['calls']]:.6f}\n")
 
 # Generate sentences using the bigram model
 generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max_words=50, start_word='<s>') for _ in range(10)]
@@ -46,9 +47,9 @@ generated_sentences = [GENERATE(word_index_dict, probs, model_type='bigram', max
 # Store the generated sentences in a file bigram_generation.txt
 with open("bigram_generation.txt", "w") as f:
     for sentence in generated_sentences:
-        f.write(f"{sentence}")
+        f.write(f"{sentence}\n")
                  
-for i, sentence in enumerate(generated_sentences, start=1):  # HELP heel veel <s> <s> <s>
+for i, sentence in enumerate(generated_sentences, start=1):  
     print(f"Sentence {i}: {sentence}")
 
 #Iterate through every sentence in the toy corpus
